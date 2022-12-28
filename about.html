@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script type="text/javascript" src="js/processing.min.js"></script>
+  <script type="text/javascript" src="init.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500|Rubik:500" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link href= "css/main.css" rel="stylesheet">
+  <script type="text/javascript">
+// place your images in this array
+var random_images_array = ['logo1.gif', 'logo2.gif', 'logo3.gif']
+
+function getRandomImage(imgAr, path) {
+    path = path || 'images/'; // default path here
+    var num = Math.floor( Math.random() * imgAr.length );
+    var img = imgAr[ num ];
+    var imgStr = '<img src="' + path + img + '" alt = "">';
+    document.write(imgStr); document.close();
+}
+
+</script>
+
+  <title>Generate About</title>
+  <meta charset="utf-8">
+</head>
+
+<body>
+
+  <!--navbar-->
+  <nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-1">
+  <script id="logo" type="text/javascript">getRandomImage(random_images_array, 'images/')</script>
+  </div>
+  <div class="col-md-3">
+<a href="index.html"><img src="images/logotype.png" alt="logotype" id="logotype" width="60%" padding-top="100px"></img></a>
+  </div>
+  <div class="col-md-3"></div>
+  <div class="col-md-4">
+      <ul class="nav navbar-nav navbar-center">
+        <li><a href="about.html">ABOUT</a></li>
+        <li><a href="examples.html">EXAMPLES</a></li>
+        <li><a href="gettingStarted.html" >GETTING STARTED</a></li>
+
+      </ul>
+    </div>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div id="rowspacer3" class="row">
+
+    <div id="outline" class="col-md-6">
+      <h2>WHAT IS GENERATE?
+  </h2>
+        <h3>GENERATE IS A PLATFORM TO HELP INTRODUCE GRAPHIC DESIGNERS TO THE PROCESSING LANGUAGE. THIS SITE IS AIMED AT HIGHLIGHTING KEY ASPECTS OF THE PROCESSING PLATFORM AND ITS USES FOR THE GRAPHIC DESIGN FIELD.</h3>
+          <p>This website contains many of the helpful resources I encountered during my quest to discover what Processing is and how to use it. I include some of the basic programs that I found useful for the graphic design field along with a curated list of the best FREE resources I encountered during my research. Enjoy!</p>
+
+
+    </div>
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-5">
+      <script id="myCanvas2" type="application/processing" target="mysketch3">
+      /**
+  * noisy sphere ring
+  *
+  * @author aa_debdeb
+  * @date 2016/06/18
+  */
+
+  float radious = 200;
+  float noiseScale = 0.01;
+  float timeScale = 0.03;
+
+  void setup(){
+    size(500, 500, P3D);
+  }
+
+  void draw(){
+    background(0);
+    stroke(255);
+    noFill();
+    translate(width / 2, height / 2, -100);
+    rotateZ(map(mouseX, 0, width, -PI * 2.0 / 3, PI * 2.0 / 3));
+    rotateX(map(mouseY, 0, height, -PI * 2.0 / 3, PI * 2.0 / 3));
+    for(float y = -radious * 2.0 / 3; y <= radious * 2.0 / 3; y += 3){
+      float r = radious * cos(asin(abs(y / radious)));
+      beginShape();
+      for(float radian = 0; radian < TWO_PI; radian += PI / 128){
+        float x = r * cos(radian);
+        float z = r * sin(radian);
+        float yy = y + map(noise(x * noiseScale, frameCount * timeScale, z * noiseScale) , 0, 1, -radious / 3, radious / 3);
+        if(yy > radious){
+          yy = radious;
+        }
+        float rr = radious * cos(asin(abs(yy / radious)));
+        float xx = rr * cos(radian);
+        float zz = rr * sin(radian);
+        vertex(xx, yy, zz);
+      }
+      endShape(CLOSE);
+    }
+  }
+      </script>
+      <canvas id="mysketch3"/></canvas>
+      <h5>NOISY SPHERE RING BY: AADEBDEB</h5>
+
+    </div>
+      <div id="rowspacer2" class="row">
+      <div class="col-md-12">
+        <iframe src="https://player.vimeo.com/video/209848991" width="100%" height="720" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+      </div>
+    </div>
+  <div id="rowspacer3" class="row">
+    <div class="col-md-5">
+      <script id="myCanvas2" type="application/processing" target="mysketch4">
+      float spacing;
+  float columns;
+  float rows;
+  PVector mousePos;
+
+  void setup() {
+   size(500,600);
+   spacing = 20;
+   columns = int(width/spacing);
+   rows = int(height/spacing);
+  }
+
+  void draw() {
+   background(0);
+   mousePos = new PVector(mouseX,mouseY);
+   stroke(200);
+   for(int i = 0; i < columns; i++){
+     for(int j = 0; j < rows; j++){
+       //point(i*spacing,j*spacing);
+       Ticks(i*spacing, j*spacing);
+       //rect(i*spacing,j*spacing,spacing,spacing);
+     }
+   }
+  }
+
+
+  void Ticks(float x, float y) {
+   PVector pos = new PVector(x,y);
+   point(pos.x,pos.y);
+   //float mouseMag =
+   stroke(random(100,255));
+   //PVector lineDir = new PVector(mousePos.x-pos.x, mousePos.y-pos.y);
+   PVector lineTarget = new PVector(mouseX, mouseY);
+   lineTarget.sub(pos);
+   lineTarget.mult(-1);
+
+   pushMatrix();
+   translate(pos.x,pos.y);
+   lineTarget.normalize();
+   lineTarget.mult(10);
+   line(0,0, lineTarget.x,lineTarget.y);
+   popMatrix();
+  };
+      </script>
+      <canvas id="mysketch4"/></canvas>
+      <h5>GRID OF LINES POINTING AWAY FROM MOUSE BY: CHARLES-E
+
+    </div>
+    <div class="col-md-1">
+    </div>
+    <div id="outline" class="col-md-6">
+      <h2>OVERVIEW
+</h2>
+      <h3>PROCESSING IS A TOOL THAT CAN CREATE VISUALS FROM CODE. BASED ON JAVA, THE PROCESSING LIBRARY ADDS CUSTOM FUNTIONS THAT ARE EASIER TO UNDERSTAND AND USE.</h3>
+        <p>Not only can users create specific creations that they program, results can also be random and generative. The results can vary but can offer new and interesting ways to create and design. Processing, like many other tools at a designer’s disposal has a time and a place in which it should be used. Processing is best used when doing large repetitive tasks, such as expression animations or creating patterns. Although this doesn’t exactly answer the question asked at the top of this page, it is a start.</p>
+
+    </div>
+    <div id="rowspacer2" class="row">
+      <div id="outline" class="col-md-6">
+        <h2>WHAT ARE THE STRENGTHS OF PROCESSING?
+  </h2>
+        <h3>PROCESSING IS GREAT AT MAKING RANDOM ART BASED OFF OF MATHEMATICAL EQUATIONS. IT CAN SIMLUATE FORMS FOUND IN NATURE AS WELL AS ANIMATE OUT THE DRAWING OF THESE NATURAL SYSTEMS</h3>
+          <p>Not only can users create specific creations that they program, results can also be random and generative. The results can vary but offer new and interesting ways to create and design.  Processing is best used when doing large repetitive tasks, such as expression animations or creating patterns. Users can also produce programs that can leverage patterns and noise to create brushes or random elements to draw with. Examples of some of these great uses can be found on the <a href="examples.html"><strong>EXAMPLES</strong></a> page. Processing, like many other tools at a designer’s disposal has a time and a place in which it should be used.</p>
+
+    </div>
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-5">
+      <script id="myCanvas3" type="application/processing" target="mysketch5">
+      int fc, num = 200, edge = 100;
+ArrayList ballCollection;
+boolean save = false;
+float scal, theta;
+
+void setup() {
+  size(600, 700);
+  background(0);
+  ballCollection = new ArrayList();
+  createStuff();
+}
+
+void draw() {
+  background(0);
+  for (int i=0; i<ballCollection.size(); i++) {
+    Ball mb = (Ball) ballCollection.get(i);
+    mb.run();
+  }
+
+  theta += (0.0523/2);
+
+  if (save) {
+    if (frameCount%6==0 && frameCount < fc + 241) saveFrame("image-####.gif");
+  }
+}
+
+void keyPressed() {
+  fc = frameCount;
+  save = true;
+}
+
+void mouseReleased() {
+  createStuff();
+}
+
+void createStuff() {
+  ballCollection.clear();
+  for (int i=0; i<num; i++) {
+    PVector org = new PVector(random(edge, width-edge), random(edge, height-edge));
+    float radius = random(20, 80);
+    PVector loc = new PVector(org.x+radius, org.y);
+    float offSet = random(TWO_PI);
+    int dir = 1;
+    float r = random(1);
+    if (r>.5) dir =-1;
+    Ball myBall = new Ball(org, loc, radius, dir, offSet);
+    ballCollection.add(myBall);
+  }
+}
+class Ball {
+
+  PVector org, loc;
+  float sz = 2;
+  float radius, offSet, a, c;
+  float[] col = new float[num];
+  int s, dir, countC, d = 40;
+  boolean[] connection = new boolean[num];
+
+  Ball(PVector _org, PVector _loc, float _radius, int _dir, float _offSet) {
+    org = _org;
+    loc = _loc;
+    radius = _radius;
+    dir = _dir;
+    offSet = _offSet;
+  }
+
+  void run() {
+    display();
+    move();
+    lineBetween();
+  }
+
+  void move() {
+    loc.x = org.x + sin(theta*dir+offSet)*radius;
+    loc.y = org.y + cos(theta*dir+offSet)*radius;
+  }
+
+  void lineBetween() {
+    countC = 1;
+    for (int i=0; i<ballCollection.size(); i++) {
+      Ball other = (Ball) ballCollection.get(i);
+      float distance = loc.dist(other.loc);
+      if (distance >0 && distance < d) {
+        connection[i] = true;
+      }
+      else {
+        connection[i] = false;
+      }
+      if (connection[i]) countC++;
+      //println(countC);
+      if (distance >0 && distance < d) {
+        a = map(countC, 1, 20, 10, 150);
+        stroke(#ffffff, a);
+        //strokeWeight(c);
+        line(loc.x, loc.y, other.loc.x, other.loc.y);
+        colorMode(RGB);
+      }
+    }
+
+    //println(countC);
+  }
+  void display() {
+    noStroke();
+    fill(255, a);
+    ellipse(loc.x, loc.y, sz, sz);
+  }
+}
+</script>
+      <canvas id="mysketch5"/></canvas>
+      <h5>NODE FIELD BY:GUILLAUME
+SCHLIPAK</h5>
+    </div>
+
+    <div id="rowspacer2" class="row">
+      <div class="col-md-5">
+        <script id="myCanvas2" type="application/processing" target="mysketch4">
+        int numAnchors = 5; // numbers of anchor points
+        int n=7; // number of subdivisions
+        int frames = 120;
+        int exp = int(pow(2, n));
+        int dir;
+        float theta, fc;
+        boolean save;
+        Curve[] myCurves = new Curve[numAnchors];
+        PVector[] origAnchors = new PVector[numAnchors];
+        PVector[] myAnchors = new PVector[numAnchors];
+
+        void setup() {
+          size(500, 700);
+          background(0);
+          generateAnchors();
+          updateAnchors();
+          generateCurves();
+        }
+
+        void draw() {
+          updateAnchors();
+          generateCurves();
+          if (save) {
+            if (frameCount<=fc+frames) saveFrame("image-###.gif");
+          }
+          theta += TWO_PI/frames;
+        }
+
+        void generateAnchors() {
+          for (int i=0; i<numAnchors; i++) {
+            float r = 25;
+            float d = 150+i*random(-r, r);
+            float vx = width/2 + cos(TWO_PI/numAnchors*i)*d;
+            float vy = height/2 + sin(TWO_PI/numAnchors*i)*d;
+            origAnchors[i] = new PVector(vx, vy);
+            myAnchors[i] = origAnchors[i].get();
+          }
+        }
+
+        void updateAnchors() {
+          for (int i=0; i<numAnchors; i++) {
+            dir=i%2==0?1:-1;
+            myAnchors[i].x = origAnchors[i].x + cos(theta)*(i+1)*10*dir;
+            myAnchors[i].y = origAnchors[i].y + sin(theta)*(i+1)*10*dir;
+          }
+        }
+
+        void generateCurves() {
+          background(0);
+          for (int i=0; i<numAnchors; i++) {
+            myCurves[i] = new Curve(myAnchors[(i+1)%numAnchors], myAnchors[(i+2)%numAnchors], myAnchors[i%numAnchors]);
+            myCurves[i].generateRatios();
+            myCurves[i].drawPoints();
+          }
+        }
+
+        void mouseReleased() {
+          generateAnchors();
+          generateCurves();
+        }
+
+        void keyPressed() {
+          fc = frameCount;
+          save = true;
+        }
+
+        class Curve {
+
+          float[] ratioA = new float[exp];
+          float[] ratioB = new float[exp];
+          float[] ratioC = new float[exp];
+          PVector A, B, C;
+          int sz = 50;
+
+          Curve(PVector _A, PVector _B, PVector _C) {
+            A = _A;
+            B = _B;
+            C = _C;
+          }
+
+          void generateRatios() {
+            float denom = pow(4, n);
+            for (int i=0; i<(exp/2); i++) {
+              ratioB[i] = (((i*(i+1))/2.0))/denom;
+              ratioC[i] = ((((exp-i-1)*(exp-i))/2.0))/denom;
+              ratioA[i] = 1-ratioB[i]-ratioC[i];
+            }
+            for (int i=exp/2; i<exp; i++) {
+              ratioB[i] = ((i*(i+1))/2)/denom;
+              ratioC[i] = (((exp-i-1)*(exp-i))/2)/denom;
+              ratioA[i] = 1-ratioB[i]-ratioC[i];
+            }
+          }
+
+          void drawPoints() {
+            /*
+            stroke(150, 150);
+            line(A.x, A.y, B.x, B.y);
+            line(C.x, C.y, B.x, B.y);
+
+            fill(255, 0, 0, 150);
+            stroke(0, 200);
+            int sz2 = 10;
+            ellipse(A.x, A.y, sz2, sz2);
+            ellipse(B.x, B.y, sz2, sz2);
+            ellipse(C.x, C.y, sz2, sz2);
+            */
+            for (int i=0; i<exp; i++) {
+              float px = A.x*ratioA[i]+B.x*ratioB[i]+C.x*ratioC[i];
+              float py = A.y*ratioA[i]+B.y*ratioB[i]+C.y*ratioC[i];
+              fill(255);
+              noStroke();
+              ellipse(px, py, sz, sz);
+            }
+          }
+
+        }
+        </script>
+        <canvas id="mysketch4"/></canvas>
+          <h5><br>_______BLOB BY: JEROME HERR</h5>
+      </div>
+      <div class="col-md-1">
+      </div>
+      <div id="outline" class="col-md-6">
+        <h2>WHAT DOES PROCESSING DO POORLY?
+  </h2>
+        <h3>LEARNING PROCESSING IS DIFFICULT FOR FIRST TIME PROGRAMMERS. IT IS ONE OF THE SIMPLEST LANGUAGES TO LEARN, YET THERE IS STILL A LEARNING CURVE WHEN IT COMES TO LEARNING HOW TO PROGRAM. THIS ALONE MAY TURN MANY DESIGNERS AWAY FROM THE PLATFORM.</h3>
+          <p>In addition to the higher learning curve, the direct correlation of having an idea and being able to execute it is completely different from traditional creative tools. Processing requires the ability to pre-plan structure and the designer must come into a project with a clear plan of how they are going to approach it. In addition, using this platform to solely create a project in is very time consuming. The user must be able to think through complex systems and understand how programming objects work to use Processing to its highest level. Processing truely is a wonderful tool for creatives to develop new and innovative art. A high level of patience and critical thinking is an absolute requirement. </p>
+
+      </div>
+</div>
+</div>
+</div>
+</div>
+<footer>
+    <div class="col-md-5"></div>
+    <div class="col-md-2">
+<p>&copy; 2017 <a href="www.gnr8.design">GNR8.DESIGN</a><p>
+</div>
+<div class="col-md-5"></div>
+</div>
+
+</footer>
+</div>
+
+</body>
+</html>

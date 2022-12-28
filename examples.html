@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script type="text/javascript" src="js/processing.min.js"></script>
+  <script type="text/javascript" src="init.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500|Rubik:500" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link href= "css/main.css" rel="stylesheet">
+
+  <script type="text/javascript">
+// place your images in this array
+var random_images_array = ['logo1.gif', 'logo2.gif', 'logo3.gif']
+
+function getRandomImage(imgAr, path) {
+    path = path || 'images/'; // default path here
+    var num = Math.floor( Math.random() * imgAr.length );
+    var img = imgAr[ num ];
+    var imgStr = '<img src="' + path + img + '" alt = "">';
+    document.write(imgStr); document.close();
+}
+
+</script>
+
+  <title>Generate Home</title>
+  <meta charset="utf-8">
+</head>
+
+<body>
+
+  <!--navbar-->
+  <nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-1">
+  <script id="logo" type="text/javascript">getRandomImage(random_images_array, 'images/')</script>
+  </div>
+  <div class="col-md-3">
+<a href="index.html"><img src="images/logotype.png" alt="logotype" id="logotype" width="60%" padding-top="100px"></img></a>
+  </div>
+  <div class="col-md-3"></div>
+  <div class="col-md-4">
+      <ul class="nav navbar-nav navbar-center">
+        <li><a href="about.html">ABOUT</a></li>
+        <li><a href="examples.html">EXAMPLES</a></li>
+        <li><a href="gettingStarted.html" >GETTING STARTED</a></li>
+
+      </ul>
+    </div>
+    </div>
+  </div>
+</nav>
+
+
+<div class="container-fluid">
+  <div  class="row">
+    <div id="bgsketch" class="col-md-12">
+        <script id="myCanvas2" type="application/processing" target="mysketch5">
+        final int NB_PARTICLES = 6000;
+  final float MAX_PARTICLE_SPEED = 3;
+
+  float noiseZ;
+  float noiseSpeedZ, stepNoiseXY;
+  final float TP = TWO_PI;
+  myVector tabParticles[];//array of particles
+  float c1, c2;
+
+  void setup()
+  {
+    size(1900, 700, P2D);
+    background(0);
+    colorMode(HSB, 255);
+    initialize();
+  }
+
+  void initialize()
+  {
+    c1 = random(85, 110);
+    c2 = random(255 - c1);
+    noiseZ = random(123456);
+    noiseSpeedZ = random(.005, .015) * (random(1) < .5 ? 1 : -1);
+    stepNoiseXY = random(.001, .01);
+    tabParticles = new myVector[NB_PARTICLES];
+    for (int i = 0; i < NB_PARTICLES; i++) {
+      tabParticles[i] = new myVector();
+    }
+    background(0);
+  }
+
+  void draw()
+  {
+    fill(0, 89);
+    noStroke();
+    rect(0, 0, width, height);
+
+    noiseZ += noiseSpeedZ;
+    for (int i = 0; i < NB_PARTICLES; i++){
+      tabParticles[i].update();
+    }
+  }
+
+  void mousePressed() {
+    initialize();
+  }
+
+  void keyPressed() {
+    for (int i = 0; i < NB_PARTICLES; i++) {
+      tabParticles[i] = new myVector();
+    }
+  }
+
+  class myVector {
+    float x, y;
+    color myColor;
+
+    myVector () {
+      initPart();
+    }
+
+    void initPart(){
+      x = random(width);
+      y = random(height);
+
+      float n = noise(x * stepNoiseXY, y * stepNoiseXY, noiseZ);
+      myColor = color(c2 + c1 * n, 255, 255);
+    }
+
+    void update(){
+      float n = (noise(x*stepNoiseXY, y*stepNoiseXY, noiseZ));
+      n = map(n, .1, .9, 0, TP);
+
+      x += n*cos(n * TP) * MAX_PARTICLE_SPEED;
+      y += n*sin((1-n) * TP) * MAX_PARTICLE_SPEED;
+
+      if ((x < 0) || (x > width) ||
+        (y < 0) || (y > height)) {
+        initPart();
+      }
+      stroke(myColor, 80);
+      point(x, y);
+    }
+  }
+</script>
+      <canvas id="mysketch5"/></canvas>
+    <div id="sketchtext" class="col-md-6">
+      <h1>EXAMPLES</h1>
+      <h2 id="alth2">THIS PAGE CONTAINS EXAMPLES OF SOME OF THE BASIC USES FOR PROCESSING. OUTLINED BELOW ARE SPECIFIC USES FOR PROCESSING ALONG WITH A SMALL DESCRIPTION OF WHAT IS BEING DEMONSTRATED.</h2>
+    </div>
+    <div class="col-md-5">
+    </div>
+  </div>
+  </div>
+</div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <iframe src="https://player.vimeo.com/video/209843767" width="100%" height="720" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+      </div>
+    </div>
+  <div id="rowspacer4" class="row">
+    <div class="col-md-5">
+      <h2>DRAWING PRIMITIVE SHAPES AND SIMPLE ANIMATIONS</h2>
+      <h3>PROCESSING HAS A LIBRARY OF SIMPLE SHAPES AND COMMANDS THAT CAN EXECUTE MOST PRIMITIVE GEOMETRY AND SIMPLE DIRECTIONAL ANIMATIONS.</h3>
+    </div>
+    <div class="col-md-1">
+    </div>
+
+    <div class="col-md-5">
+      <script id="myCanvas2" type="application/processing" target="mysketch6">
+      //making Cubes
+
+    int cubeLen = 60;//length of cube
+
+    void setup(){
+     size(475,475);
+     background(0);
+    }
+
+    void draw(){
+     background(0);//black
+     strokeWeight(3);
+     stroke(255,0,0);//red
+     translate(width/2,height/2);
+
+     for (int j=0;j<6;j++){
+     rotate(radians(60));
+     pushMatrix();//move the grid
+     rotate(frameCount/120);//will rotate the group
+     translate(0,20*sin(frameCount/50)+50);
+     rotate(-frameCount/60);
+     cube();
+     popMatrix();//reset the grid
+         }
+     }
+
+     void cube(){
+     for (int i=0;i<3;i++){
+     line(0,0,0,cubeLen);//make a line
+     translate(0,cubeLen);//go to end of line
+     rotate(2*PI/3);    //turn right
+     line(0,0,0,cubeLen);//make another line
+     rotate(-4*PI/3);    //rotate all the way to the left
+     line(0,0,0,cubeLen);    //make the line on the left
+     rotate(2*PI/3);    //turn back to straight ahead
+     translate(0,-cubeLen);    //go back to start
+     rotate(2*PI/3);
+     }
+
+    }
+</script>
+    <canvas id="mysketch6"/></canvas>
+
+    </div>
+    <div class="col-md-1">
+      <h5>CUBE
+        <br>
+        BY: RAZVAN BOGACIU</h5>
+    </div>
+  </div>
+  <div id="rowspacer3" class="row">
+    <div class="col-md-5">
+      <h2>3D SHAPES</h2>
+      <h3>THERE ARE BOTH 2D AND 3D RENDER MODES IN PROCESSING. THIS ALLOWS USERS TO CREATE IN THREE DIMENSIONS. THE FILES CAN BE SAVED AS .OBJ FILES AND EXPORTED INTO VARIOUS 3D MODELLING SOFTWARE, ALLOWING FOR HIGHER FIDELITY RENDERS TO BE TAKEN.</h3>
+    </div>
+    <div class="col-md-1">
+    </div>
+
+    <div class="col-md-5">
+      <script id="myCanvas2" type="application/processing" target="mysketch7">
+      /*
+  Virus network 3d
+
+  Author:
+    Jason Labbe
+
+  Site:
+    jasonlabbe3d.com
+
+  Controls:
+    - Hold left-click to rotate camera.
+    - Hold middle-click to move camera.
+    - Hold right-click to zoom or scroll mouse wheel to zoom.
+  */
+
+
+  // Global variables
+  float depth = 900;
+
+  float widthOffset;
+  float heightOffset;
+  float depthOffset;
+
+  int bobCount = 100;
+  ArrayList<Bob> bobs = new ArrayList<Bob>();
+
+  ArrayList<Cube> cubes = new ArrayList<Cube>();
+  float cubeSize = 3;
+
+  PVector mouseClick = new PVector();
+
+  PVector posStart = new PVector();
+  PVector rotStart = new PVector();
+  float zoomStart = 0;
+
+  PVector cameraPos = new PVector();
+  PVector cameraRot = new PVector();
+  float cameraZoom = -800;
+
+
+  class Cube {
+
+    boolean active = true;
+    PVector pos;
+    int startFrame = 0;
+    color color1 = color(255, 0);
+    color color2 = color(255, 30);
+
+    Cube(PVector _pos, int _startFrame) {
+      this.pos = new PVector(_pos.x, _pos.y, _pos.z);
+      this.startFrame = _startFrame;
+    }
+
+    void display() {
+      if (! active) {
+        return;
+      }
+
+      if (frameCount > this.startFrame) {
+        float blendValue = sin((frameCount-startFrame)*0.05);
+
+        // Mark it as inactive once it fades out
+        if (blendValue < 0) {
+          this.active = false;
+          return;
+        }
+
+        color currentColor = lerpColor(this.color1, this.color2, blendValue);
+
+        noFill();
+        stroke(currentColor);
+        strokeWeight(3);
+
+        pushMatrix();
+        translate(this.pos.x-widthOffset, this.pos.y-heightOffset, this.pos.z-depthOffset);
+        box(cubeSize*2);
+        popMatrix();
+      }
+    }
+  }
+
+
+  class Bob {
+
+    PVector pos;
+    PVector dir;
+    float speed;
+
+    Bob(float _x, float _y, float _z, float _speed) {
+      this.pos = new PVector(_x, _y, _z);
+      this.dir = PVector.random3D();
+      this.dir.normalize();
+      this.speed = _speed;
+    }
+
+    void move() {
+      this.pos.x += this.dir.x*this.speed;
+      this.pos.y += this.dir.y*this.speed;
+      this.pos.z += this.dir.z*this.speed;
+    }
+
+    void keepInBounds() {
+      if (this.pos.x < 0) {
+        this.pos.x = 0;
+        this.dir.x *= -1;
+        createCubePattern(this.pos, new String[] {"y", "z"});
+      } else if (this.pos.x > width) {
+        this.pos.x = width;
+        this.dir.x *= -1;
+        createCubePattern(this.pos, new String[] {"y", "z"});
+      }
+
+      if (this.pos.y < 0) {
+        this.pos.y = 0;
+        this.dir.y *= -1;
+        createCubePattern(this.pos, new String[] {"x", "z"});
+      } else if (this.pos.y > height) {
+        this.pos.y = height;
+        this.dir.y *= -1;
+        createCubePattern(this.pos, new String[] {"x", "z"});
+      }
+
+      if (this.pos.z < 0) {
+        this.pos.z = 0;
+        this.dir.z *= -1;
+        createCubePattern(this.pos, new String[] {"x", "y"});
+      } else if (this.pos.z > depth) {
+        this.pos.z = depth;
+        this.dir.z *= -1;
+        createCubePattern(this.pos, new String[] {"x", "y"});
+      }
+    }
+
+    // Get number of close enough bobs
+    ArrayList<Bob> getNeighbors(float threshold) {
+      ArrayList<Bob> proximityBobs = new ArrayList<Bob>();
+
+      for (Bob otherBob : bobs) {
+        if (this == otherBob) {
+          continue;
+        }
+
+        float distance = dist(this.pos.x, this.pos.y, this.pos.z,
+                              otherBob.pos.x, otherBob.pos.y, otherBob.pos.z);
+        if (distance < threshold) {
+          proximityBobs.add(otherBob);
+        }
+      }
+
+      return proximityBobs;
+    }
+
+    void draw() {
+      ArrayList<Bob> proximityBobs = this.getNeighbors(120);
+
+      if (proximityBobs.size() > 0) {
+        float blendValue = constrain(map(proximityBobs.size(), 0, 6, 0.0, 1.0), 0.0, 1.0);
+        color smallColor = color(0, 255, 255, 100);
+        color bigColor = color(255, 0, 0, 100);
+        color currentColor = lerpColor(smallColor, bigColor, blendValue);
+
+        // Draw line
+        stroke(currentColor);
+
+        for (Bob otherBob : proximityBobs) {
+          line(this.pos.x-widthOffset, this.pos.y-heightOffset, this.pos.z-depthOffset,
+               otherBob.pos.x-widthOffset, otherBob.pos.y-heightOffset, otherBob.pos.z-depthOffset);
+        }
+
+        // Draw red bob
+        smooth();
+        stroke(currentColor);
+        strokeWeight(proximityBobs.size()*3);
+        point(this.pos.x-widthOffset, this.pos.y-heightOffset, this.pos.z-depthOffset);
+        noSmooth();
+      } else {
+        // Draw normal bob
+        stroke(255);
+        strokeWeight(max(1, proximityBobs.size()));
+        point(this.pos.x-widthOffset, this.pos.y-heightOffset, this.pos.z-depthOffset);
+      }
+
+      // Bobs with too many neighbours slow down, otherwise speed it up
+      if (proximityBobs.size() > 2) {
+        this.speed *= 0.97;
+      } else {
+        this.speed *= 1.01;
+      }
+      this.speed = max(0.25, min(this.speed, 6));
+    }
+  }
+
+
+  // Creates a series of cubes to fade in then out
+  void createCubePattern(PVector source, String[] axis) {
+    PVector pos = new PVector(source.x, source.y, source.z);
+
+    int count = (int)random(2, 10);
+
+    for (int x = 0; x < count; x++) {
+      int delayOffset = frameCount+4*x;
+      Cube newCube = new Cube(new PVector(pos.x, pos.y, pos.z), delayOffset);
+      cubes.add(newCube);
+
+      String dir = axis[int(random(axis.length))];
+
+      float val;
+      if ((int)random(2) == 0) {
+        val = cubeSize*2;
+      } else {
+        val = -cubeSize*2;
+      }
+
+      if (dir == "x") {
+        pos.x += val;
+      } else if (dir == "y") {
+        pos.y += val;
+      } else {
+        pos.z += val;
+      }
+    }
+  }
+
+
+  void setup() {
+    size(475, 475, P3D);
+
+    widthOffset = width/2;
+    heightOffset = height/2;
+    depthOffset = depth/2;
+
+    for (int i = 0; i < bobCount; i++) {
+      bobs.add(new Bob(random(0.0, width), random(0.0, height), random(0.0, depth), random(0.5, 2.0)));
+    }
+  }
+
+
+  void draw() {
+    background(0, 0, 0);
+
+    pushMatrix();
+
+    translate(width/2, height/2, depth/2);
+    translate(cameraPos.x, cameraPos.y, cameraZoom);
+    rotateY(radians(cameraRot.x));
+    rotateX(radians(-cameraRot.y));
+
+    for (Bob bob : bobs) {
+      bob.move();
+      bob.keepInBounds();
+      bob.draw();
+    }
+
+    for (int x = 0; x < cubes.size(); x++) {
+      Cube cube = cubes.get(x);
+      cube.display();
+    }
+
+    popMatrix();
+  }
+
+
+  // Initializes camera controls
+  void mousePressed() {
+    if (mouseButton == LEFT) {
+      rotStart.set(cameraRot.x, cameraRot.y);
+    } else if (mouseButton == CENTER) {
+      posStart.set(cameraPos.x, cameraPos.y);
+    } else {
+      zoomStart = cameraZoom;
+    }
+    mouseClick.set(mouseX, mouseY);
+  }
+
+
+  // Camera controls
+  void mouseDragged() {
+    if (mouseButton == LEFT) {
+      cameraRot.x = rotStart.x+(mouseX-mouseClick.x);
+      cameraRot.y = rotStart.y+(mouseY-mouseClick.y);
+    } else if (mouseButton == CENTER) {
+      cameraPos.x = posStart.x+(mouseX-mouseClick.x);
+      cameraPos.y = posStart.y+(mouseY-mouseClick.y);
+    } else if (mouseButton == RIGHT) {
+      cameraZoom = zoomStart+(mouseX-mouseClick.x)-(mouseY-mouseClick.y);
+    }
+  }
+
+
+  // Enables zoom with mouse wheel
+  // Only works in Javascript, fails in Java.
+  void mouseScrolled() {
+    float zoomValue = 50;
+
+    if (mouseScroll > 0) {
+      cameraZoom += zoomValue;
+    } else {
+      cameraZoom -= zoomValue;
+    }
+  }
+</script>
+    <canvas id="mysketch7"/></canvas>
+
+    </div>
+    <div class="col-md-1">
+      <h5>VIRUS NETWORK 3D
+        <br>
+        BY: JASON LABBE</h5>
+        <br>
+        <br>
+        <h5><span>CLICK OR SCROLL TO INTERACT</span></h5>
+    </div>
+  </div>
+  <div id="rowspacer3" class="row">
+    <div class="col-md-5">
+      <h2>SIMPLE AND INTERACTIVE DRAWING APPLICATIONS</h2>
+      <h3>SKETCHES CAN TAKE USER INPUTS FROM THE KEYBOARD AND MOUSE AS WELL AS PURPOSED FOR DRAWING WITH SPECIFIC CRITERIA. ALTHOUGH THIS MIGHT NOT BE PRACTICAL AGAINST USING A DRAWING PROGRAM LIKE ILLUSTRATOR OR PHOTOSHOP, THE RESULTS CAN BE UNEXPECTED AND INTERESTING.</h3>
+    </div>
+    <div class="col-md-1">
+    </div>
+
+    <div class="col-md-5">
+      <script id="myCanvas2" type="application/processing" target="mysketch8">
+      /**
+      sKeTch is audiovisual application
+
+      Aris Bezas Sat, 16 July 2011, 17:31
+
+      SC-CODE
+      =======
+      s.boot;
+      (
+      SynthDef("Xaraktiki",
+                  { arg  amp = 0.5, pan = 0, out = 0;
+                      var source;
+                      var panned_source;
+                      source = HPF.ar(BrownNoise.ar(amp, 0), MouseX.kr(1000,8000));
+                      panned_source = Pan2.ar(source, MouseX.kr(-0.9, 0.9));
+                      Out.ar( out, panned_source);
+                  }
+             ).send(s);
+      )
+
+      // OSC router
+      p = NetAddr("127.0.0.1", 12000);  // send to Processing
+      z = Synth("Xaraktiki");
+      OSCresponder(nil, "amp", { | time, resp, message |
+              z.set("amp", message[1]);
+      }).add;
+
+
+      */
+      import processing.opengl.*;
+      //import oscP5.*;
+      //import netP5.*;
+
+      //OscP5 oscP5;
+      //NetAddress myRemoteLocation;
+
+      boolean miden, smoothFade;
+      boolean xar=true;
+
+      // Sound Input Variables
+      float amp1, freq1, amp2, freq2, ampout, freqout;
+      float ElegxosAmp;
+
+      SketchLine  line0, line1, line2;
+      float x1, y1, x2, y2;
+      PImage cur;
+
+      int stoixeia = 30, lineAlpha = 50;
+
+      //  Color Variables
+      int colorL=255,strokeL, strokeValue = 20, strokeBackground = 5;
+      int paintCount = 0, alphaSform;
+      int r0,g0,b0,r1,g1,b1;
+
+      // Physics Variables
+      float[] x = new float[stoixeia];
+      float[] y = new float[stoixeia];
+      float[] epitaxinsiX = new float[stoixeia];
+      float[] epitaxinsiY = new float[stoixeia];
+      float[] elastikotita = new float[stoixeia];
+      float[] aposbesi = new float[stoixeia];
+      float[] deltaX = new float[stoixeia];
+      float[] deltaY = new float[stoixeia];
+      float fxMouse, fyMouse;
+
+      void setup()  {
+        frameRate(300);
+        size(475,475);
+
+        //oscP5 = new OscP5(this,46100);   //listening
+        //myRemoteLocation = new NetAddress("127.0.0.1",57120);  //  speak to
+
+        line0 = new SketchLine(30);
+        line1 = new SketchLine(stoixeia);
+        line2 = new SketchLine(stoixeia + 1);
+
+        line0.calcType( 0.2, 0.65 );// 0.2, 0.65 writeLine
+        line1.calcType( 0.1, 0.65 );// 0.2, 0.65 writeLine
+        line2.calcType( 0.3, 0.65 );// 0.2, 0.65 writeLine
+
+        background(0);
+        noFill();
+        smooth();
+      //  noCursor();
+        //cur = loadImage("cursor10black.png");
+        //cur.resize(8, 8);
+        //cursor(cur, mouseX, mouseY);
+
+        for (int i=0; i<stoixeia; i++){
+          elastikotita[i] = 0.2*(.07*(i+1));// 0.05  kai 0.005
+          aposbesi[i] = 0.55-(0.02*i);
+        }
+      }
+
+      void draw()  {
+        myLine();
+        noFill();
+        if (mousePressed == true)  {
+          line0.calcPoints(mouseX, mouseY);
+          line0.render(255,255,255, lineAlpha);
+          line1.calcPoints(mouseX, mouseY);
+          line1.render(255,255,255, lineAlpha);
+
+        } else {
+            line0.calcPoints(mouseX, mouseY);
+          line0.render(255,0,0, 0);
+          line1.calcPoints(mouseX, mouseY);
+          line1.render(255,255,0, 0);
+          line2.calcPoints(mouseX, mouseY);
+          line2.render(255,255,255, 0);
+
+        }
+        if (smoothFade) {
+          fill(0,12);
+          rect(-40,-40,height,width);
+        }
+      }
+
+      void myLine(){
+
+        if (mousePressed == true)  {
+          if(miden == true) {
+            for (int i=0; i<stoixeia; i++){
+              x[i] = mouseX;// move worm
+              y[i] = mouseY;
+              miden = false;
+            }
+            //cursor(cur, 0,0);
+          }
+          strokeL = strokeValue;
+        }
+
+
+        noFill();
+        drawline();
+
+      }
+
+
+      void drawline(){
+          fxMouse = mouseX;
+          fyMouse = mouseY;
+       // beginShape();
+          for (int i=0; i<5; i++){
+          if (i==0){
+            deltaX[i] = (fxMouse - x[i]);
+            deltaY[i] = (fyMouse - y[i]);
+            if (mousePressed && xar)  {
+              //OscMessage amp = new OscMessage("amp");
+              //ElegxosAmp = map(abs(deltaX[i])+abs(deltaY[i]), 0, 340, 0, 0.2  );
+             // amp.add(ElegxosAmp);
+             // oscP5.send(amp, myRemoteLocation);
+            }
+
+          }
+          else {
+            deltaX[i] = (x[i-1]-x[i]);
+            deltaY[i] = (y[i-1]-y[i]);
+          }
+          deltaX[i] *= elastikotita[i];    // create elastikotita effect
+          deltaY[i] *= elastikotita[i];
+          epitaxinsiX[i] += deltaX[i];
+          epitaxinsiY[i] += deltaY[i];
+          x[i] += epitaxinsiX[i];// move it
+          y[i] += epitaxinsiY[i];
+          vertex(x[i],y[i]);
+          epitaxinsiX[i] *= aposbesi[i];    // slow down elastikotita
+          epitaxinsiY[i] *= aposbesi[i];
+        }
+        endShape();
+      }
+
+
+
+      void mouseReleased()  {
+        if(xar)  {
+         // OscMessage silence = new OscMessage("amp");
+         // silence.add(0);
+         // oscP5.send(silence, myRemoteLocation);
+        }
+
+        line0.calcPointsStart(mouseX, mouseY);
+      }
+
+      void mousePressed()  {
+        line0.calcPointsStart(mouseX, mouseY);
+        line1.calcPointsStart(mouseX, mouseY);
+        line2.calcPointsStart(mouseX, mouseY);
+      }
+
+
+      void mouseDragged() {
+      }
+
+
+      void keyPressed(){
+        if (key == 'z') {
+          //cursor(cur, 0, 0);
+        }
+        if (key == 'b') {
+          background(0);
+        }
+        if (key == 'B') {
+          background(0);
+        }
+        if (key == 's') {
+          smoothFade = !smoothFade;
+        }
+
+      }
+
+
+      // ==========  SKETCH CLASS  ===================
+      /*
+       091027 Igoumeninja Aris Bezas
+       class: sKeTch
+       variables:  stoixeia, elastikotita, aposvesi, red, green, blue, alpha
+       methods:  calcType, calcPoints, render
+       */
+
+      class  SketchLine  {
+        int stoixeia = 1000, colorR, colorG, colorB, lineAlpha = 25;
+        float elast, aposv;
+        float[] x = new float[stoixeia];
+        float[] y = new float[stoixeia];
+        float[] epitaxinsiX = new float[stoixeia];
+        float[] epitaxinsiY = new float[stoixeia];
+        float[] elastikotita = new float[stoixeia];
+        float[] aposvesi = new float[stoixeia];
+        float[] deltaX = new float[stoixeia];
+        float[] deltaY = new float[stoixeia];
+
+        float pointX, pointY;
+
+
+        SketchLine(int stoixeiaVar)  {
+          stoixeia = stoixeiaVar;
+        }
+
+        void calcType(float elastikotitaVar, float aposvesiVar)  {
+          elast = elastikotitaVar;
+          aposv = aposvesiVar;
+          for (int i=0; i < stoixeia; i++){
+            elastikotita[i] = elast*(.07*(i+1));// 0.05  kai 0.005
+            aposvesi[i] = aposv-(0.02*i);
+          }
+        }
+
+        void calcPoints(float pointXVar, float pointYVar)  {
+          pointX = pointXVar;
+          pointY = pointYVar;
+
+          for (int i=0; i<stoixeia; i++){
+            if (i==0){
+              deltaX[i] = (pointX - x[i]);
+              deltaY[i] = (pointY - y[i]);
+      //        if (mousePressed)  {
+      //          OscMessage amp = new OscMessage("amp");
+      //          ElegxosAmp = map(abs(deltaX[i])+abs(deltaY[i]),0,340,0,1.6  );
+      //          amp.add(ElegxosAmp);
+      //          oscP5.send(amp, myRemoteLocation);
+      //        }
+            }
+            else  {
+              deltaX[i] = (x[i-1]-x[i]);
+              deltaY[i] = (y[i-1]-y[i]);
+            }
+            deltaX[i] *= elastikotita[i];    // create elastikotita effect
+            deltaY[i] *= elastikotita[i];
+            epitaxinsiX[i] += deltaX[i];
+            epitaxinsiY[i] += deltaY[i];
+            x[i] += epitaxinsiX[i];// move it
+            y[i] += epitaxinsiY[i];
+            epitaxinsiX[i] *= aposvesi[i];    // slow down elastikotita
+            epitaxinsiY[i] *= aposvesi[i];
+          }
+        }
+        void calcPointsStart(float pointXVar, float pointYVar)  {
+          pointX = pointXVar;
+          pointY = pointYVar;
+          for (int i=0; i<stoixeia; i++){
+            x[i] = mouseX;
+            y[i] = mouseY;
+          }
+        }
+
+
+        void render(int colorRVar, int colorGVar, int colorBVar, int lineAlphaVar)  {
+          colorR = colorRVar;
+          colorG = colorGVar;
+          colorB = colorBVar;
+          lineAlpha = lineAlphaVar;
+          noFill();
+          stroke(colorR, colorG, colorB, lineAlpha);
+          beginShape();
+          for (int i = 0; i < stoixeia; i++)  {
+            curveVertex(x[i], y[i]);
+          }
+          endShape();
+        }
+
+      }
+</script>
+    <canvas id="mysketch8"/></canvas>
+
+    </div>
+    <div class="col-md-1">
+      <h5>SILKY
+        <br>
+        BY: ARIS BEZAS AND JOSEPH COHN</h5>
+        <br>
+        <br>
+        <h5><span>CLICK TO DRAW, PRESS B TO CLEAR</span></h5>
+    </div>
+  </div>
+  <div id="rowspacer3" class="row">
+    <div class="col-md-5">
+      <h2>PARTICLE GENERATION</h2>
+      <h3>THIS SKETCH DEMONSTRATES THE ABILITY TO GENERATE PARTICLES FROM DRAWN ELEMENTS IN PROCESSING.</h3>
+    </div>
+    <div class="col-md-1">
+    </div>
+
+    <div class="col-md-5">
+      <script id="myCanvas2" type="application/processing" target="mysketch9">
+      //Inspired by Raven Kwok aka Guo, Ruiwen
+//ravenkwok.com
+//vimeo.com/ravenkwok
+//flickr.com/photos/ravenkwok
+//Mycelium by Max Chen
+
+ArrayList<Particle> pts;
+boolean onPressed, showInstruction;
+PFont f;
+
+void setup() {
+  size(475,475, P2D);
+  smooth();
+  frameRate(100);
+  colorMode(HSB);
+  rectMode(CENTER);
+
+  pts = new ArrayList<Particle>();
+
+  showInstruction = true;
+  f = createFont("Calibri", 24, true);
+
+  background(0);
+}
+
+void draw() {
+  if (showInstruction) {
+    background(0);
+    fill(0);
+    textAlign(CENTER, CENTER);
+    textFont(f);
+    textLeading(36);
+    text("Drag and fabricate mycelium." + "\n" +
+      "Press 'h' to harvest mycelium." + "\n"
+      , width*0.5, height*0.5);
+  }
+
+  if (onPressed) {
+    for (int i=0;i<10;i++) {
+      Particle newP = new Particle(mouseX, mouseY, i+pts.size(), i+pts.size());
+      pts.add(newP);
+    }
+  }
+
+  for (int i=0; i<pts.size(); i++) {
+    Particle p = pts.get(i);
+    p.update();
+    p.display();
+  }
+
+  for (int i=pts.size()-1; i>-1; i--) {
+    Particle p = pts.get(i);
+    if (p.dead) {
+      pts.remove(i);
+    }
+  }
+}
+
+void mousePressed() {
+  onPressed = true;
+  if (showInstruction) {
+    background(#000000);
+    showInstruction = false;
+  }
+}
+
+void mouseReleased() {
+  onPressed = false;
+}
+
+void keyPressed() {
+  if (key == 'c') {
+    for (int i=pts.size()-1; i>-1; i--) {
+      Particle p = pts.get(i);
+      pts.remove(i);
+    }
+    background(#000000);
+  }
+}
+
+class Particle{
+  PVector loc, vel, acc;
+  int lifeSpan, passedLife;
+  boolean dead;
+  float alpha, weight, weightRange, decay, xOffset, yOffset;
+  color c;
+
+  Particle(float x, float y, float xOffset, float yOffset){
+    loc = new PVector(x,y);
+
+    float randDegrees = random(360);
+    vel = new PVector(cos(radians(randDegrees)), sin(radians(randDegrees)));
+    vel.mult(random(5));
+
+    acc = new PVector(0,0);
+    lifeSpan = int(random(30, 90));
+    decay = random(0.75, 0.9);
+    c = color(#000000);
+    weightRange = random(3,50);
+
+    this.xOffset = xOffset;
+    this.yOffset = yOffset;
+  }
+
+  void update(){
+    if(passedLife>=lifeSpan){
+      dead = true;
+    }else{
+      passedLife++;
+    }
+
+    alpha = float(lifeSpan-passedLife)/lifeSpan * 70+50;
+    weight = float(lifeSpan-passedLife)/lifeSpan * weightRange;
+
+    acc.set(0,0);
+
+    float rn = (noise((loc.x+frameCount+xOffset)*0.01, (loc.y+frameCount+yOffset)*0.01)-0.5)*4*PI;
+    float mag = noise((loc.y+frameCount)*0.01, (loc.x+frameCount)*0.01);
+    PVector dir = new PVector(cos(rn),sin(rn));
+    acc.add(dir);
+    acc.mult(mag);
+
+    float randDegrees = random(360);
+    PVector randV = new PVector(cos(radians(randDegrees)), sin(radians(randDegrees)));
+    randV.mult(0.5);
+    acc.add(randV);
+
+    vel.add(acc);
+    vel.mult(decay);
+    vel.limit(3);
+    loc.add(vel);
+  }
+
+  void display(){
+    strokeWeight(weight+1.5);
+    stroke(255, alpha);
+    point(loc.x, loc.y);
+
+    strokeWeight(weight);
+    stroke(c);
+    point(loc.x, loc.y);
+  }
+}
+</script>
+    <canvas id="mysketch9"/></canvas>
+
+    </div>
+    <div class="col-md-1">
+      <h5>MYCELIUM
+        <br>
+        BY: MAX CHEN</h5>
+        <br>
+        <br>
+        <h5><span>CLICK TO DRAW, PRESS C TO CLEAR</span></h5>
+    </div>
+  </div>
+  <div id="rowspacer3" class="row">
+    <div class="col-md-5">
+      <h2>GAMES</h2>
+      <h3>SINCE PROCESSING IS A CUSTOM LIBRARY FOR JAVA, GAMES CAN BE CREATED USING THE PROCESSING LIBRARY.</h3>
+    </div>
+    <div class="col-md-1">
+    </div>
+
+    <div class="col-md-5">
+      <script id="myCanvas2" type="application/processing" target="mysketch10">
+      // LITTLE GAME 003
+      //
+      int mode; // -1 : reset, 0 : transition; 1 : jeu, 2 : gagne
+      // timer
+      float tempsDebut,temps,tempsInc,tempsPrec;
+      // pieces
+      int n;
+      float res,d,r,c;
+      float[] cx,cy;
+      boolean[][] gauche,droite,haut,bas;
+      // souris
+      int mousePosX,mousePosY;
+
+      void setup() {
+        size(475,475);
+        background(0);
+        reset(2);
+      }
+
+      void reset(int _n) {
+        mode = -1;
+        tempsDebut = millis();
+        temps = 2000;
+        tempsInc = 1;
+        tempsPrec = tempsDebut;
+        //
+        mousePosX = -2;
+        mousePosY = -2;
+        //
+        n = _n;
+        setupPieces();
+      }
+
+      void setupPieces() {
+        setupPiecesPlace();
+        gauche = new boolean[n][n];
+        droite = new boolean[n][n];
+        haut = new boolean[n][n];
+        bas = new boolean[n][n];
+        for(int i=0;i<n;i++) {
+          for(int j=0;j<n;j++) {
+            setupPieceLigne(i,j);
+          }
+        }
+      }
+
+      void setupPiecesPlace() {
+        res = width>height? height/float(n+2) : width/float(n+2);
+        cx = new float[n];
+        cy = new float[n];
+        for(int i=0;i<n;i++) {
+          cx[i] = width*0.5 - (n-1)*0.5*res + res*i;
+          cy[i] = height*0.5 - (n-1)*0.5*res + res*i;
+        }
+        d = res - res*0.1;
+        r = d*0.5;
+        c = d*0.1;
+      }
+
+      void setupPieceLigne(int i,int j) {
+        boolean vide = true;
+        while(vide) {
+          if(random(2)>1) {gauche[i][j]=true;vide=false;} else {gauche[i][j]=false;}
+          if(random(2)>1) {droite[i][j]=true;vide=false;} else {droite[i][j]=false;}
+          if(random(2)>1) {haut[i][j]=true;vide=false;} else {haut[i][j]=false;}
+          if(random(2)>1) {bas[i][j]=true;vide=false;} else {bas[i][j]=false;}
+        }
+      }
+
+      void draw() {
+        switch(mode) {
+          case -1 : // reset
+            if(millis()<tempsDebut+temps) {
+              if(millis()-tempsPrec>tempsInc) {
+                float chance = map(millis()-tempsDebut,temps*0.8,0,0,1);
+                for(int i=0;i<n;i++) {
+                  for(int j=0;j<n;j++) {
+                    if(random(1)<chance) {
+                      setupPieceLigne(round(random(0,n-1)),round(random(0,n-1)));
+                    }
+                  }
+                }
+                tempsInc *= 1.2;
+                tempsPrec = millis();
+              }
+              noStroke();
+              fill(0,20);
+              rectMode(CORNERS);
+              rect(0,0,width,height);
+              for(int i=0;i<n;i++) {
+                for(int j=0;j<n;j++) {
+                  dessinerLignes(i,j);
+                }
+              }
+            } else {
+              mode++;
+              tempsDebut = millis();
+              tempsInc = 300;
+            }
+          break;
+          case 0 : // transition
+            background(0);
+            if(millis()>tempsDebut+1*tempsInc) {
+              for(int i=0;i<n;i++) {
+                for(int j=0;j<n;j++) {
+                  dessinerPieces(i,j);
+                }
+              }
+            }
+            if(millis()>tempsDebut+2*tempsInc) {
+              dessinerCroix();
+            }
+            if(millis()>tempsDebut+3*tempsInc) {
+              dessinerCercle();
+            }
+            if(millis()>tempsDebut+4*tempsInc) {
+              dessinerN();
+            }
+            for(int i=0;i<n;i++) {
+              for(int j=0;j<n;j++) {
+                dessinerLignes(i,j);
+              }
+            }
+            if(millis()>tempsDebut+6*tempsInc) mode++;
+          break;
+          case 1 : // jeu
+            if(estConnexe()) {
+              tempsDebut = millis();
+              temps = 4000;
+              mode++;
+            }
+            mousePosX = floor(mouseX/res)-1;
+            mousePosY = floor(mouseY/res)-1;
+            background(0);
+            for(int i=0;i<n;i++) {
+              for(int j=0;j<n;j++) {
+                dessinerPieces(i,j);
+              }
+            }
+            dessinerCroix();
+            dessinerCercle();
+            dessinerN();
+            for(int i=0;i<n;i++) {
+              for(int j=0;j<n;j++) {
+                dessinerLignes(i,j);
+              }
+            }
+            if(mousePosX==-1&&mousePosY>-1&&mousePosY<n) {
+              dessinerFleche(cx[0]-res,cy[mousePosY],PI);
+            }
+            if(mousePosX==n&&mousePosY>-1&&mousePosY<n) {
+              dessinerFleche(cx[n-1]+res,cy[mousePosY],0);
+            }
+            if(mousePosY==-1&&mousePosX>-1&&mousePosX<n) {
+              dessinerFleche(cx[mousePosX],cy[0]-res,3*HALF_PI);
+            }
+            if(mousePosY==n&&mousePosX>-1&&mousePosX<n) {
+              dessinerFleche(cx[mousePosX],cy[n-1]+res,HALF_PI);
+            }
+          break;
+          case 2 : // partie gagnée
+            noStroke();
+            fill(0,10);
+            rectMode(CORNERS);
+            rect(0,0,width,height);
+            for(int i=0;i<n;i++) {
+              for(int j=0;j<n;j++) {
+                dessinerLignes(i,j);
+              }
+            }
+            if(millis()>tempsDebut+temps) {
+              reset(n+1);
+            }
+          break;
+        }
+      }
+
+      void dessinerPieces(int i,int j) {
+        switch(mode) {
+          case -1 :
+            return;
+          case 0 :
+            float t = map(millis()-(tempsDebut+1*tempsInc),0,1.5*tempsInc,0,25);
+            t = constrain(t,0,25);
+            noStroke();
+            fill(t);
+          break;
+          case 1 :
+            noStroke();
+            fill(mousePosX==i&&mousePosY==j?50:25);
+          break;
+          case 2 :
+            noStroke();
+            fill(255);
+          break;
+        }
+        rectMode(CENTER);
+        rect(cx[i],cy[j],d,d,c);
+      }
+
+      void dessinerLignes(int i,int j) {
+        switch(mode) {
+          case -1 :
+            stroke(255);
+            strokeWeight(1.15);
+            noFill();
+          break;
+          case 0 :
+            stroke(255);
+            strokeWeight(2);
+            noFill();
+          break;
+          case 1 :
+            stroke(255);
+            strokeWeight(2);
+            noFill();
+          break;
+          case 2 :
+            stroke(255);
+            strokeWeight(2);
+            noFill();
+          break;
+        }
+        if(gauche[i][j]) {
+          if(droite[i][j]) {
+            line(cx[i]-r,cy[j],cx[i]+r,cy[j]);
+          }
+          if(haut[i][j]) {
+            arc(cx[i]-r,cy[j]-r,d,d,0,HALF_PI);
+          }
+          if(bas[i][j]) {
+            arc(cx[i]-r,cy[j]+r,d,d,3*HALF_PI,TWO_PI);
+          }
+          if(!droite[i][j]&&!haut[i][j]&&!bas[i][j]) {
+            line(cx[i]-r,cy[j],cx[i],cy[j]);
+          }
+        }
+        if(droite[i][j]) {
+          if(haut[i][j]) {
+            arc(cx[i]+r,cy[j]-r,d,d,HALF_PI,PI);
+          }
+          if(bas[i][j]) {
+            arc(cx[i]+r,cy[j]+r,d,d,PI,3*HALF_PI);
+          }
+          if(!gauche[i][j]&&!haut[i][j]&&!bas[i][j]) {
+            line(cx[i]+r,cy[j],cx[i],cy[j]);
+          }
+        }
+        if(haut[i][j]) {
+          if(bas[i][j]) {
+            line(cx[i],cy[j]-r,cx[i],cy[j]+r);
+          }
+          if(!gauche[i][j]&&!droite[i][j]&&!bas[i][j]) {
+            line(cx[i],cy[j]-r,cx[i],cy[j]);
+          }
+        }
+        if(bas[i][j]&&!gauche[i][j]&&!droite[i][j]&&!haut[i][j]) {
+          line(cx[i],cy[j]+r,cx[i],cy[j]);
+        }
+      }
+
+      void dessinerFleche(float x,float y,float angle) {
+        stroke(255);
+        strokeWeight(0.5);
+        noFill();
+        beginShape();
+        for(int i=0;i<3;i++) {
+          vertex(x+r*0.5*cos(angle+i*TWO_PI/3),y+r*0.5*sin(angle+i*TWO_PI/3));
+        }
+        endShape(CLOSE);
+      }
+
+      void dessinerCroix() {
+        switch(mode) {
+          case -1 :
+          return;
+          case 0 :
+            stroke(255,map(millis()-(tempsDebut+2*tempsInc),0,1.5*tempsInc,0,255));
+            strokeWeight(0.5);
+            noFill();
+          break;
+          case 1 :
+            stroke(255);
+            strokeWeight(mousePosX==-1&&mousePosY==-1? 2:0.5);
+          break;
+          case 2 :
+          return;
+        }
+        line(cx[0]-res-r*0.5,cy[0]-res-r*0.5,cx[0]-res+r*0.5,cy[0]-res+r*0.5);
+        line(cx[0]-res-r*0.5,cy[0]-res+r*0.5,cx[0]-res+r*0.5,cy[0]-res-r*0.5);
+      }
+
+      void dessinerCercle() {
+        switch(mode) {
+          case -1 :
+          return;
+          case 0 :
+            stroke(255,map(millis()-(tempsDebut+3*tempsInc),0,1.5*tempsInc,0,255));
+            strokeWeight(0.5);
+            noFill();
+          break;
+          case 1 :
+            stroke(255);
+            strokeWeight(mousePosX==n&&mousePosY==-1? 2:0.5);
+            noFill();
+          break;
+          case 2 :
+          return;
+        }
+        ellipse(cx[n-1]+res,cy[0]-res,r,r);
+      }
+
+      void dessinerN() {
+        switch(mode) {
+          case -1 :
+          return;
+          case 0 :
+            fill(100,map(millis()-(tempsDebut+4*tempsInc),0,1.5*tempsInc,0,255));
+          break;
+          case 1 :
+            fill(100);
+          break;
+          case 2 :
+          return;
+        }
+        textSize(r);
+        textAlign(CENTER,CENTER);
+        text(n,cx[n-1]+res,cy[n-1]+res);
+      }
+
+      void mousePressed() {
+        if(mode!=1) return;
+        if(mousePosX==-1&&mousePosY==-1) {
+          reset(2);
+        } else
+        if(mousePosX==n&&mousePosY==-1) {
+          reset(n);
+        } else
+        if(mousePosX==-1&&mousePosY>-1&&mousePosY<n) {
+          deplacementLigne(mousePosY,true);
+        } else
+        if(mousePosX==n&&mousePosY>-1&&mousePosY<n) {
+          deplacementLigne(mousePosY,false);
+        } else
+        if(mousePosY==-1&&mousePosX>-1&&mousePosX<n) {
+          deplacementColonne(mousePosX,true);
+        } else
+        if(mousePosY==n&&mousePosX>-1&&mousePosX<n) {
+          deplacementColonne(mousePosX,false);
+        } else
+        if(mousePosX>-1&&mousePosX<n&&mousePosY>-1&&mousePosY<n) {
+          tournerPiece(mousePosX,mousePosY);
+        }
+      }
+
+      void tournerPiece(int i,int j) {
+        boolean newBas = bas[i][j];
+        bas[i][j] = droite[i][j];
+        droite[i][j] = haut[i][j];
+        haut[i][j] = gauche[i][j];
+        gauche[i][j] = newBas;
+      }
+
+      void deplacementColonne(int i,boolean versHaut) {
+        boolean memoGauche,memoDroite,memoHaut,memoBas;
+        if(versHaut) {
+          memoGauche = gauche[i][0];
+          memoDroite = droite[i][0];
+          memoHaut = haut[i][0];
+          memoBas = bas[i][0];
+          for(int j=0;j<n-1;j++) {
+            gauche[i][j] = gauche[i][j+1];
+            droite[i][j] = droite[i][j+1];
+            haut[i][j] = haut[i][j+1];
+            bas[i][j] = bas[i][j+1];
+          }
+          gauche[i][n-1] = memoGauche;
+          droite[i][n-1] = memoDroite;
+          haut[i][n-1] = memoHaut;
+          bas[i][n-1] = memoBas;
+        } else {
+          memoGauche = gauche[i][n-1];
+          memoDroite = droite[i][n-1];
+          memoHaut = haut[i][n-1];
+          memoBas = bas[i][n-1];
+          for(int j=n-1;j>0;j--) {
+            gauche[i][j] = gauche[i][j-1];
+            droite[i][j] = droite[i][j-1];
+            haut[i][j] = haut[i][j-1];
+            bas[i][j] = bas[i][j-1];
+          }
+          gauche[i][0] = memoGauche;
+          droite[i][0] = memoDroite;
+          haut[i][0] = memoHaut;
+          bas[i][0] = memoBas;
+        }
+      }
+
+      void deplacementLigne(int j,boolean versGauche) {
+        boolean memoGauche,memoDroite,memoHaut,memoBas;
+        if(versGauche) {
+          memoGauche = gauche[0][j];
+          memoDroite = droite[0][j];
+          memoHaut = haut[0][j];
+          memoBas = bas[0][j];
+          for(int i=0;i<n-1;i++) {
+            gauche[i][j] = gauche[i+1][j];
+            droite[i][j] = droite[i+1][j];
+            haut[i][j] = haut[i+1][j];
+            bas[i][j] = bas[i+1][j];
+          }
+          gauche[n-1][j] = memoGauche;
+          droite[n-1][j] = memoDroite;
+          haut[n-1][j] = memoHaut;
+          bas[n-1][j] = memoBas;
+        } else {
+          memoGauche = gauche[n-1][j];
+          memoDroite = droite[n-1][j];
+          memoHaut = haut[n-1][j];
+          memoBas = bas[n-1][j];
+          for(int i=n-1;i>0;i--) {
+            gauche[i][j] = gauche[i-1][j];
+            droite[i][j] = droite[i-1][j];
+            haut[i][j] = haut[i-1][j];
+            bas[i][j] = bas[i-1][j];
+          }
+          gauche[0][j] = memoGauche;
+          droite[0][j] = memoDroite;
+          haut[0][j] = memoHaut;
+          bas[0][j] = memoBas;
+        }
+      }
+
+      boolean estConnexe() {
+        boolean[][] deja = new boolean[n][n];
+        for(int i=0;i<n;i++) {
+          for(int j=0;j<n;j++) {
+            deja[i][j] = false;
+          }
+        }
+        int[] listeI = new int[0];
+        int[] listeJ = new int[0];
+        listeI = append(listeI,0);
+        listeJ = append(listeJ,0);
+        deja[0][0] = true;
+        while(listeI.length>0) {
+          if(gauche[listeI[0]][listeJ[0]] && listeI[0]>0) {
+            if(droite[listeI[0]-1][listeJ[0]] && !deja[listeI[0]-1][listeJ[0]]) {
+              listeI = append(listeI,listeI[0]-1);
+              listeJ = append(listeJ,listeJ[0]);
+              deja[listeI[0]-1][listeJ[0]] = true;
+            }
+          }
+          if(droite[listeI[0]][listeJ[0]] && listeI[0]<n-1) {
+            if(gauche[listeI[0]+1][listeJ[0]] && !deja[listeI[0]+1][listeJ[0]]) {
+              listeI = append(listeI,listeI[0]+1);
+              listeJ = append(listeJ,listeJ[0]);
+              deja[listeI[0]+1][listeJ[0]] = true;
+            }
+          }
+          if(haut[listeI[0]][listeJ[0]] && listeJ[0]>0) {
+            if(bas[listeI[0]][listeJ[0]-1] && !deja[listeI[0]][listeJ[0]-1]) {
+              listeI = append(listeI,listeI[0]);
+              listeJ = append(listeJ,listeJ[0]-1);
+              deja[listeI[0]][listeJ[0]-1] = true;
+            }
+          }
+          if(bas[listeI[0]][listeJ[0]] && listeJ[0]<n-1) {
+            if(haut[listeI[0]][listeJ[0]+1] && !deja[listeI[0]][listeJ[0]+1]) {
+              listeI = append(listeI,listeI[0]);
+              listeJ = append(listeJ,listeJ[0]+1);
+              deja[listeI[0]][listeJ[0]+1] = true;
+            }
+          }
+          listeI = subset(listeI,1);
+          listeJ = subset(listeJ,1);
+        }
+        int num = 0;
+        for(int i=0;i<n;i++) {
+          for(int j=0;j<n;j++) {
+            if(deja[i][j]) num++;
+          }
+        }
+        return num==n*n? true:false;
+      }
+</script>
+    <canvas id="mysketch10"/></canvas>
+
+    </div>
+    <div class="col-md-1">
+      <h5>LITTLE GAME 002</h5>
+        <br>
+        <h5>BY: GWENN</h5>
+        <br>
+        <br>
+        <h5><span>CLICK TO MOVE PIECES, MAKE ALL THE TILES CONNECT TO WIN</span></h5>
+    </div>
+  </div>
+  <div id="rowspacer3" class="row">
+    <div class="col-md-5">
+      <h2>TYPOGRAPHY</h2>
+      <h3>THE PROCESSING LIBRARY OFFERS FULL SUPPORT FOR TRUETYPE FONTS AND CAN BE RENDERED DIRECTLY INTO THE SKETCH IF IT IS INSTALLED INTO YOUR SKETCH'S MAIN DIRECTORY. VECTORS CAN ALSO BE RENDERED WITHIN THE PROCESSING LIBRARY NATIVELY.</h3>
+    </div>
+    <div class="col-md-1">
+    </div>
+
+    <div class="col-md-5">
+      <script id="myCanvas2" type="application/processing" target="mysketch11">
+      int fc, num = 2000;
+ArrayList ballCollection;
+boolean save = false;
+float scal, theta;
+PGraphics letter;
+PFont font;
+String l = "S";
+
+void setup() {
+  background(0);
+  size(475, 475);
+  letter = createGraphics(width, height);
+  font = loadFont("Arial-Black-250.vlw");
+  ballCollection = new ArrayList();
+  createStuff();
+  //frameRate(1);
+}
+
+void draw() {
+  background(0);
+
+  for (int i=0; i<ballCollection.size (); i++) {
+    Ball mb = (Ball) ballCollection.get(i);
+    mb.run();
+  }
+
+  theta += .0523;
+
+  if (save) {
+    if (frameCount%1==0 && frameCount < fc + 30) saveFrame("image-####.gif");
+  }
+}
+
+void keyPressed() {
+  if (key != CODED) l = str(key);
+  createStuff();
+}
+
+void mouseReleased() {
+  //createStuff();
+  //fc = frameCount;
+  //save = true;
+  //saveFrame("image-###.gif");
+}
+
+void createStuff() {
+  ballCollection.clear();
+
+  letter.beginDraw();
+  letter.noStroke();
+  letter.background(255);
+  letter.fill(0);
+  letter.textFont(font, 400);
+  letter.textAlign(CENTER);
+  letter.text(l, 200, 350);
+  letter.endDraw();
+  letter.loadPixels();
+
+  for (int i=0; i<num; i++) {
+    int x = (int)random(width);
+    int y = (int)random(height);
+    //color c = letter.get(x, y);
+    int c = letter.pixels[x+y*width];
+    if (brightness(c)<255) {
+      PVector org = new PVector(x, y);
+      float radius = random(5, 10);
+      PVector loc = new PVector(org.x+radius, org.y);
+      float offSet = random(TWO_PI);
+      int dir = 1;
+      float r = random(1);
+      if (r>.5) dir =-1;
+      Ball myBall = new Ball(org, loc, radius, dir, offSet);
+      ballCollection.add(myBall);
+    }
+  }
+}
+class Ball {
+
+  PVector org, loc;
+  float sz = 2;
+  float radius, offSet, a;
+  int s, dir, countC, d = 20;
+  boolean[] connection = new boolean[num];
+
+  Ball(PVector _org, PVector _loc, float _radius, int _dir, float _offSet) {
+    org = _org;
+    loc = _loc;
+    radius = _radius;
+    dir = _dir;
+    offSet = _offSet;
+  }
+
+  void run() {
+    display();
+    move();
+    lineBetween();
+  }
+
+  void move() {
+    loc.x = org.x + sin(theta*dir+offSet)*radius;
+    loc.y = org.y + cos(theta*dir+offSet)*radius;
+  }
+
+  void lineBetween() {
+    countC = 1;
+    for (int i=0; i<ballCollection.size(); i++) {
+      Ball other = (Ball) ballCollection.get(i);
+      float distance = loc.dist(other.loc);
+      if (distance >0 && distance < d) {
+        a = map(countC,0,10,10,255);
+        stroke(255, a);
+        line(loc.x, loc.y, other.loc.x, other.loc.y);
+        connection[i] = true;
+      }
+      else {
+        connection[i] = false;
+      }
+    }
+    for (int i=0; i<ballCollection.size(); i++) {
+      if (connection[i]) countC++;
+    }
+  }
+
+  void display() {
+    noStroke();
+    fill(255, 200);
+    ellipse(loc.x, loc.y, sz, sz);
+  }
+}
+
+</script>
+    <canvas id="mysketch11"/></canvas>
+
+    </div>
+    <div class="col-md-1">
+      <h5>CREATE 'WEBBY' NUMBERS AND LETTERS
+        <br>
+        BY: JEROME HERR</h5>
+        <br>
+        <br>
+        <h5><span>TYPE TO CHANGE THE CHARACTER</span></h5>
+    </div>
+  </div>
+  <footer>
+      <div class="col-md-5"></div>
+      <div class="col-md-2">
+  <p>&copy; 2017 <a href="www.gnr8.design">GNR8.DESIGN</a><p>
+  </div>
+  <div class="col-md-5"></div>
+  </div>
+
+  </footer>
+
+</div>
+
+
+</body>
+</html>

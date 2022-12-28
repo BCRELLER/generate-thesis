@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script type="text/javascript" src="js/processing.min.js"></script>
+  <script type="text/javascript" src="init.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500|Rubik:500" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link href= "css/main.css" rel="stylesheet">
+
+  <script type="text/javascript">
+// place your images in this array
+var random_images_array = ['logo1.gif', 'logo2.gif', 'logo3.gif']
+
+function getRandomImage(imgAr, path) {
+    path = path || 'images/'; // default path here
+    var num = Math.floor( Math.random() * imgAr.length );
+    var img = imgAr[ num ];
+    var imgStr = '<img src="' + path + img + '" alt = "">';
+    document.write(imgStr); document.close();
+}
+
+</script>
+
+  <title>Generate Home</title>
+  <meta charset="utf-8">
+</head>
+
+<body>
+
+  <!--navbar-->
+  <nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-1">
+  <script id="logo" type="text/javascript">getRandomImage(random_images_array, 'images/')</script>
+  </div>
+  <div class="col-md-3">
+<a href="index.html"><img src="images/logotype.png" alt="logotype" id="logotype" width="60%" padding-top="100px"></img></a>
+  </div>
+  <div class="col-md-3"></div>
+  <div class="col-md-4">
+      <ul class="nav navbar-nav navbar-center">
+        <li><a href="about.html">ABOUT</a></li>
+        <li><a href="examples.html">EXAMPLES</a></li>
+        <li><a href="gettingstarted.html" >GETTING STARTED</a></li>
+
+      </ul>
+    </div>
+    </div>
+  </div>
+</nav>
+
+
+<div class="container-fluid">
+  <div  class="row">
+    <div  class="col-md-12">
+        <script id="myCanvas" type="application/processing" target="mysketch13">
+        /* OpenProcessing Tweak of *@*http://www.openprocessing.org/sketch/49654*@* */
+        /* !do not delete the line above, required for linking your tweak if you upload again */
+        public static float fastSqrt(float x) {
+            return Float.intBitsToFloat(532483686 + (Float.floatToRawIntBits(x) >> 1));
+        }
+        class particle{
+          PVector x;
+          PVector v;
+          PVector f;
+          particle(){
+            x = new PVector(random(0,width),random(0,height));
+            PVector r = PVector.sub(x,new PVector(width/2,height/2));
+        //    r.normalize();
+            r.mult(0.0003);
+            v = new PVector(-r.y,r.x);
+            f = new PVector();
+          }
+          void update(){
+            v.add(f);
+            f = new PVector(0,g);
+            x.add(v);
+          }
+        }
+        ArrayList particles;
+        float diam = 6;
+        float k = 0.4;
+        float c = 0.1;
+        float g = 0.0;
+        void setup(){
+          size(1900,800);
+          fill(0,64);
+        //  noStroke();
+          reset();
+        }
+        void reset(){
+          particles = new ArrayList();
+          for(int i=0;i<1000;i++){
+            particles.add(new particle());
+          }
+        }
+        void keyPressed(){
+          if(key==' '){reset();}
+        }
+        void draw(){
+          if(frameCount%30==0){(frameRate);}
+          background(0);
+          PVector centroid = new PVector();
+          for(int i=1;i<particles.size();i++){
+            particle A = (particle) particles.get(i);
+            centroid.add(A.x);
+            for(int j=0;j<i;j++){
+              particle B = (particle) particles.get(j);
+              PVector dx = PVector.sub(B.x,A.x);
+              if(dx.mag()<diam){
+                float restore = (diam - dx.mag())*k;
+                dx.normalize();
+                float dampen = dx.dot(PVector.sub(B.v,A.v))*c;
+                dx.mult(restore - dampen);
+                A.f.sub(dx);
+                B.f.add(dx);
+                stroke(constrain(restore*2*256,0,255));
+                line(A.x.x,A.x.y,B.x.x,B.x.y);
+              }else{
+                float restore = -0.3/sq(dx.mag());
+                dx.normalize();
+                dx.mult(restore);
+                A.f.sub(dx);
+                B.f.add(dx);
+              }
+            }
+          }
+          centroid.mult(1f/particles.size());
+          PVector mouseV = new PVector(mouseX,mouseY);
+          PVector pmouseV = new PVector(pmouseX,pmouseY);
+          PVector push = new PVector();
+          if(mousePressed&&mouseButton==RIGHT){
+            PVector dx = PVector.sub(mouseV,centroid);
+            push = PVector.mult(dx,0.001);
+          }
+          for(int i=0;i<particles.size();i++){
+            particle A = (particle) particles.get(i);
+            A.f.add(push);
+            if(mousePressed&&mouseButton==LEFT){
+              PVector dx = PVector.sub(A.x,mouseV);
+              A.f.add(PVector.mult(PVector.sub(
+                PVector.sub(mouseV,pmouseV),A.v),
+                1f*pow(constrain(dx.mag(),diam/2,3.4E38),-1.5)));
+            }
+            boolean dampen = false;
+            if(A.x.x<0){
+              A.f.x -= A.x.x*k;
+              dampen = true;
+            };
+            if(A.x.x>width){
+              A.f.x -= (A.x.x-width)*k;
+              dampen = true;
+            };
+            if(A.x.y<0){
+              A.f.y -= A.x.y*k;
+              dampen = true;
+            };
+            if(A.x.y>height){
+              A.f.y -= (A.x.y-height)*k;
+              dampen = true;
+            };
+            if(dampen){A.v.mult(0.9);}
+            A.update();
+        //    set(int(A.x.x),int(A.x.y),color(#330000));
+          }
+        }
+</script>
+  <canvas id="mysketch13"/></canvas>
+    <div id="sketchtext2" class="col-md-7">
+      <h1>GETTING STARTED</h2>
+      <h3>THIS PAGE CONTAINS A CURATED LIST OF FREE RESOURCES TO LEARN PROCESSING. THE LINKS BELOW ARE SEPARATED BETWEEN TUTORIALS TO LEARN THE LANGUAGE AND SUPPLEMENTARY TUTORIALS FOR TYPOGRAPHY AND PLUGINS.
+  </h3>
+      <h4 id="outline2"><a href="https://processing.org/download/">DOWNLOAD PROCESSING</a></h4>
+    </div>
+
+    <div class="col-md-5">
+  </div>
+    </div>
+  </div>
+  <div class="container">
+  <div class="row">
+      <div class="col-md-12" id="sketchtext3">
+        <h1>RESOURCES</h1>
+        <h2 id="alth22" padding-top="-100px">LEARN PROCESSING</h2>
+      </div>
+    </div>
+  <div class="row" id="sketchtext3">
+      <div  class="col-md-4">
+      <div class="paragraph">
+        <h1>RESOURCES</h1>
+        <p>This is a collection of free resources for learning Processing. The courses are comprehensive programs that start basic and get very advanced. The supplementary links are for video collections of courses for Processing along with resources for experimental typography in Processing.</p>
+      </div>
+        <div class="paragraph">
+        <h2>COURSES</h2>
+        <a href="http://learningprocessing.com/videos/"><h3>LEARNING PROCESSING</h3></a>
+        <a href="http://natureofcode.com/book/"><h3>THE NATURE OF CODE</h3></a>
+        <a href="http://funprogramming.org/"><h3>FUN PROGRAMMING</h3></a>
+      <a href="https://processing.org/reference/"><h3>PROCESSING.ORG</h3></a>
+      </div>
+        <h2>SUPPLEMENTARY</h3>
+        <a href="https://github.com/AmnonOwed/CAN_GenerativeTypography/archive/master.zip"><h3>CAN TYPOGRAPHY TUTORIAL</h3></a>
+        <a href="https://vimeo.com/shiffman/videos"><h3>SHIFFMAN'S VIDEOS</h3></a>
+        <a href="https://issuu.com/jpagecorrigan/docs/type-code_yeohyun-ahn"><h3>TYPE+CODE</h3></a>
+
+      </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-4">
+          <script id="myCanvas2" type="application/processing" target="mysketch3">
+          int n, s, f1, f2, f3;
+
+          void setup() {
+              size(450,450);
+              background(0);
+              smooth();
+              noStroke();
+              fill(255);
+
+              n = 500;   //number of ellipse per circle
+              m = 10;    //magnitude of waves
+              f1 = 2000; //f general
+              f2 = 2;    //f of rotation
+              f3 = 5;    //f of waves
+          }
+
+          void draw() {
+              background(0);
+              float t = millis()/f1;
+
+              paintCircle(t, 0);
+              paintCircle(t, PI);
+          }
+
+          void paintCircle(float t, int o) {
+              for(int i = 0; i < n; i++) {
+                  float p = (i/n)*TWO_PI;
+
+                  int x = (width/2) + sin(p+t) * (200+sin((t*f2+p)*f3+o)*m*(1-sin(p)));
+                  int y = (height/2) + cos(p+t) * (200+sin((t*f2+p)*f3+o)*m*(1-sin(p)));
+
+                  ellipse(x, y, 5, 5);
+              }
+          }
+
+          </script>
+          <canvas id="mysketch4"/></canvas>
+        </div>
+          <div class="col-md-1">
+            <h5>SOOTHING CIRCLES
+              <br>
+              BY: MARVINK.</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <footer>
+      <div class="col-md-5"></div>
+      <div class="col-md-2">
+  <p>&copy; 2017 <a href="www.gnr8.design">GNR8.DESIGN</a><p>
+  </div>
+  <div class="col-md-5"></div>
+  </div>
+
+  </footer>
+</div>
+
+
+</body>
+</html>
